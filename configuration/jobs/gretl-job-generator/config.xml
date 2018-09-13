@@ -64,7 +64,7 @@ for (pipelineFil in pipelineFiles) {
 
   def releaseScript = readFileFromWorkspace(pipelineFil)
 
-  def properties = new Properties([&apos;logRotator.numToKeep&apos;:&apos;15&apos;])
+  def properties = new Properties([&apos;logRotator.numToKeep&apos;:&apos;15&apos;, &apos;authorization.permissions&apos;:&apos;nobody&apos;])
   def propertiesFile = new File(base + &apos;/&apos; + realJobName + &apos;/job.properties&apos;)
   if (propertiesFile.exists()) {
     properties.load(propertiesFile.newDataInputStream())
@@ -74,6 +74,9 @@ for (pipelineFil in pipelineFiles) {
     pipelineJob(realJobName) {
       logRotator {
         numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
+      }
+      authorization {
+        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Cancel&apos;, &apos;hudson.model.Item.Read&apos;])
       }
       definition {
         cps {
@@ -89,6 +92,9 @@ for (pipelineFil in pipelineFiles) {
       }
       logRotator {
         numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
+      }
+      authorization {
+        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Cancel&apos;, &apos;hudson.model.Item.Read&apos;])
       }
       definition {
         cps {
