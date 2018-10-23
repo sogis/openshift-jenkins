@@ -76,7 +76,7 @@ for (pipelineFil in pipelineFiles) {
         numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
       }
       authorization {
-        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Cancel&apos;, &apos;hudson.model.Item.Read&apos;])
+        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
       }
       definition {
         cps {
@@ -94,7 +94,7 @@ for (pipelineFil in pipelineFiles) {
         numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
       }
       authorization {
-        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Cancel&apos;, &apos;hudson.model.Item.Read&apos;])
+        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
       }
       definition {
         cps {
