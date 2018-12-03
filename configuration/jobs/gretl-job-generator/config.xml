@@ -77,14 +77,14 @@ for (pipelineFil in pipelineFiles) {
       parameters {
         stringParam(&apos;BRANCH&apos;, &apos;master&apos;, &apos;Name of branch to check out&apos;)
       }
-      triggers {
-        cron(properties.getProperty(&apos;triggers.cron&apos;))
+      authorization {
+        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
       }
       logRotator {
         numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
       }
-      authorization {
-        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
+      triggers {
+        cron(properties.getProperty(&apos;triggers.cron&apos;))
       }
       definition {
         cps {
@@ -95,14 +95,14 @@ for (pipelineFil in pipelineFiles) {
     }
   } else {
     pipelineJob(realJobName) {
-      triggers {
-        cron(properties.getProperty(&apos;triggers.cron&apos;))
+      authorization {
+        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
       }
       logRotator {
         numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
       }
-      authorization {
-        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
+      triggers {
+        cron(properties.getProperty(&apos;triggers.cron&apos;))
       }
       definition {
         cps {
