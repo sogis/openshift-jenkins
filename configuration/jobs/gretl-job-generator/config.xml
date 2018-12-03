@@ -64,14 +64,18 @@ for (pipelineFil in pipelineFiles) {
 
   def releaseScript = readFileFromWorkspace(pipelineFil)
 
-  def properties = new Properties([&apos;logRotator.numToKeep&apos;:&apos;15&apos;, &apos;authorization.permissions&apos;:&apos;nobody&apos;])
+  // set defaults for job properties
+  def properties = new Properties([&apos;authorization.permissions&apos;:&apos;nobody&apos;, &apos;logRotator.numToKeep&apos;:&apos;15&apos;, &apos;triggers.cron&apos;:&apos;&apos;])
   def propertiesFile = new File(base + &apos;/&apos; + realJobName + &apos;/job.properties&apos;)
   if (propertiesFile.exists()) {
     properties.load(propertiesFile.newDataInputStream())
   }
 
-  if (properties.getProperty(&apos;triggers.cron&apos;) == null || &quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-test&apos; || &quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-integration&apos;) {
+  if (&quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-test&apos; || &quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-integration&apos;) {
     pipelineJob(realJobName) {
+      triggers {
+        cron(properties.getProperty(&apos;triggers.cron&apos;))
+      }
       logRotator {
         numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
       }
