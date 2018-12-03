@@ -111,7 +111,7 @@ for (pipelineFil in pipelineFiles) {
       <ignoreMissingFiles>false</ignoreMissingFiles>
       <failOnMissingPlugin>false</failOnMissingPlugin>
       <unstableOnDeprecation>false</unstableOnDeprecation>
-      <removedJobAction>DISABLE</removedJobAction>
+      <removedJobAction>DELETE</removedJobAction>
       <removedViewAction>IGNORE</removedViewAction>
       <removedConfigFilesAction>IGNORE</removedConfigFilesAction>
       <lookupStrategy>JENKINS_ROOT</lookupStrategy>
