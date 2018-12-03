@@ -71,8 +71,12 @@ for (pipelineFil in pipelineFiles) {
     properties.load(propertiesFile.newDataInputStream())
   }
 
+  // difference between test/integration and production environment is the parameters property
   if (&quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-test&apos; || &quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-integration&apos;) {
     pipelineJob(realJobName) {
+      parameters {
+        stringParam(&apos;BRANCH&apos;, &apos;master&apos;, &apos;Name of branch to check out&apos;)
+      }
       triggers {
         cron(properties.getProperty(&apos;triggers.cron&apos;))
       }
