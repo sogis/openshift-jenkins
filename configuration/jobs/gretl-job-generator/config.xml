@@ -71,7 +71,6 @@ for (pipelineFil in pipelineFiles) {
     properties.load(propertiesFile.newDataInputStream())
   }
 
-  // difference between test/integration and production environment is the parameters property
   if (&quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-test&apos; || &quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-integration&apos;) {
     pipelineJob(realJobName) {
       parameters {
@@ -83,9 +82,9 @@ for (pipelineFil in pipelineFiles) {
       logRotator {
         numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
       }
-      triggers {
-        cron(properties.getProperty(&apos;triggers.cron&apos;))
-      }
+      
+      // (in test and integration environment we dont want any triggers)
+      
       definition {
         cps {
           script(releaseScript)
@@ -95,6 +94,9 @@ for (pipelineFil in pipelineFiles) {
     }
   } else {
     pipelineJob(realJobName) {
+      
+      // (in production environment we don't want the BRANCH parameter)
+      
       authorization {
         permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
       }
