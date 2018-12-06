@@ -95,7 +95,7 @@ for (pipelineFil in pipelineFiles) {
   } else {
     pipelineJob(realJobName) {
       
-      // (in production environment we don't want the BRANCH parameter)
+      // (in production environment we don&apos;t want the BRANCH parameter)
       
       authorization {
         permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
