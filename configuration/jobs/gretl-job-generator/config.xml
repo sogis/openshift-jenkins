@@ -65,7 +65,12 @@ for (pipelineFil in pipelineFiles) {
   def releaseScript = readFileFromWorkspace(pipelineFil)
 
   // set defaults for job properties
-  def properties = new Properties([&apos;authorization.permissions&apos;:&apos;nobody&apos;, &apos;logRotator.numToKeep&apos;:&apos;15&apos;, &apos;triggers.cron&apos;:&apos;&apos;])
+  def properties = new Properties([
+    &apos;authorization.permissions&apos;:&apos;nobody&apos;,
+    &apos;logRotator.numToKeep&apos;:&apos;15&apos;,
+    &apos;parameters.fileParam&apos;:&apos;none&apos;,
+    &apos;triggers.cron&apos;:&apos;&apos;
+  ])
   def propertiesFile = new File(base + &apos;/&apos; + realJobName + &apos;/job.properties&apos;)
   if (propertiesFile.exists()) {
     properties.load(propertiesFile.newDataInputStream())
@@ -77,6 +82,11 @@ for (pipelineFil in pipelineFiles) {
     if (!productionEnv) { // we don&apos;t want the BRANCH parameter in production environment
       parameters {
         stringParam(&apos;BRANCH&apos;, &apos;master&apos;, &apos;Name of branch to check out&apos;)
+      }
+    }
+    if (properties.getProperty(&apos;parameters.fileParam&apos;) != &apos;none&apos;) {
+      parameters {
+        fileParam(properties.getProperty(&apos;parameters.fileParam&apos;), &apos;Select file to upload&apos;)
       }
     }
     authorization {
