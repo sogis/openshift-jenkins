@@ -71,46 +71,29 @@ for (pipelineFil in pipelineFiles) {
     properties.load(propertiesFile.newDataInputStream())
   }
 
-  if (&quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-test&apos; || &quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-integration&apos;) {
-    pipelineJob(realJobName) {
+  def productionEnv = (&quot;${OPENSHIFT_BUILD_NAMESPACE}&quot; == &apos;agi-gretl-production&apos;)
+
+  pipelineJob(realJobName) {
+    if (!productionEnv) { // we don&apos;t want the BRANCH parameter in production environment
       parameters {
         stringParam(&apos;BRANCH&apos;, &apos;master&apos;, &apos;Name of branch to check out&apos;)
       }
-      authorization {
-        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
-      }
-      logRotator {
-        numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
-      }
-      
-      // (in test and integration environment we dont want any triggers)
-      
-      definition {
-        cps {
-          script(releaseScript)
-          sandbox()
-        }
-      }
     }
-  } else {
-    pipelineJob(realJobName) {
-      
-      // (in production environment we don&apos;t want the BRANCH parameter)
-      
-      authorization {
-        permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
-      }
-      logRotator {
-        numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
-      }
+    authorization {
+      permissions(properties.getProperty(&apos;authorization.permissions&apos;), [&apos;hudson.model.Item.Build&apos;, &apos;hudson.model.Item.Read&apos;])
+    }
+    logRotator {
+      numToKeep(properties.getProperty(&apos;logRotator.numToKeep&apos;) as Integer)
+    }
+    if (productionEnv) { // we want triggers only in production environment
       triggers {
         cron(properties.getProperty(&apos;triggers.cron&apos;))
       }
-      definition {
-        cps {
-          script(releaseScript)
-          sandbox()
-        }
+    }
+    definition {
+      cps {
+        script(releaseScript)
+        sandbox()
       }
     }
   }
