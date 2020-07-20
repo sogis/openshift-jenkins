@@ -1,6 +1,0 @@
-blueocean:1.18.1
-credentials-binding:1.19
-email-ext:2.66
-groovy:2.2
-ldap:1.20
-job-dsl:1.76
