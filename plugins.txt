@@ -1,0 +1,5 @@
+blueocean:1.23.2
+email-ext:2.75
+groovy:2.2
+ldap:1.25
+job-dsl:1.77
